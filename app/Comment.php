@@ -9,7 +9,7 @@ class Comment extends Model
     //
     protected $table = "comment";
     public function tintuc(){
-        return $this->belongsTo('App\TinTuc','idTinTuc',id);
+        return $this->belongsTo('App\TinTuc','idTinTuc','id');
     }
     public function user(){
         return $this->belongsTo('App\User','idUser','id');// một comment chỉ thuộc về một người dùng

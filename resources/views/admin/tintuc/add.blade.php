@@ -5,48 +5,73 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Category
-                    <small>Add</small>
+                <h1 class="page-header">Tin tức
+                    <small>Thêm</small>
                 </h1>
             </div>
             <!-- /.col-lg-12 -->
             <div class="col-lg-7" style="padding-bottom:120px">
-                <form action="" method="POST">
+                {{--kiểm tra lỗi--}}
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger">
+                        @foreach($errors->all() as $err)
+                            {{$err}}."<br>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if(session('thongbao'))
+                    <div class="alert alert-success">
+                        {{session('thongbao')}}
+                    </div>
+                @endif
+
+                <form action="admin/tintuc/add" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="form-group">
-                        <label>Category Parent</label>
-                        <select class="form-control">
-                            <option value="0">Please Choose Category</option>
-                            <option value="">Tin Tức</option>
+                        <label>Thể loại</label>
+                        <select class="form-control" name="TheLoai" id="TheLoai">
+                            @foreach($theloai as $tl )
+                            <option value="{{$tl->id}}">{{$tl->Ten}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Category Name</label>
-                        <input class="form-control" name="txtCateName" placeholder="Please Enter Category Name" />
+                        <label>Loại tin</label>
+                        <select class="form-control" name="LoaiTin" id="LoaiTin">
+                            @foreach($loaitin as $lt )
+                                <option value="{{$lt->id}}">{{$lt->Ten}}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Category Order</label>
-                        <input class="form-control" name="txtOrder" placeholder="Please Enter Category Order" />
+                        <label>Tiêu đề</label>
+                        <input class="form-control" name="TieuDe" placeholder="Nhập tiêu đề..." />
                     </div>
                     <div class="form-group">
-                        <label>Category Keywords</label>
-                        <input class="form-control" name="txtOrder" placeholder="Please Enter Category Keywords" />
+                        <label for="">Tóm tắt</label>
+                        <textarea name="TomTat" id="demo" cols="30" rows="3" class="ckeditor"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Category Description</label>
-                        <textarea class="form-control" rows="3"></textarea>
+                        <label for="">Nội dung</label>
+                        <textarea name="NoiDung" id="demo" cols="30" rows="4" class="ckeditor"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Category Status</label>
+                        <label for="">Hình ảnh</label>
+                        <input type="file" name="Hinh" >
+                    </div>
+                    <div class="form-group">
+                        <label for="">Nổi bật</label>
                         <label class="radio-inline">
-                            <input name="rdoStatus" value="1" checked="" type="radio">Visible
+                            <input type="radio" name="NoiBat" value="1">Có
                         </label>
                         <label class="radio-inline">
-                            <input name="rdoStatus" value="2" type="radio">Invisible
+                            <input type="radio" name="NoiBat" value="0">Không
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-default">Category Add</button>
-                    <button type="reset" class="btn btn-default">Reset</button>
-                    <form>
+                    <button type="submit" class="btn btn-default">Thêm tin</button>
+                    <button type="reset" class="btn btn-default">Làm mới</button>
+                    </form>
             </div>
         </div>
         <!-- /.row -->
@@ -54,4 +79,18 @@
     <!-- /.container-fluid -->
 </div>
 <!-- /#page-wrapper -->
-    @stop()
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function(){
+            $("#TheLoai").change(function () {
+                var idTheLoai = $(this).val(); //lấy id thể loại = chính nó
+                $.get("admin/ajax/loaitin/"+idTheLoai,function (data) {
+                    $("#LoaiTin").html(data);
+                });//dữ liệu truyền vào data
+            });
+        });
+    </script>
+    {{--//đổ dữ liệu từ thể loại vào loại tin--}}
+@endsection

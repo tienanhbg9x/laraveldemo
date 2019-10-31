@@ -16,10 +16,11 @@ class TheLoaiController extends Controller
     public function getAdd(){
         return view('admin.theloai.add');
     }
-    public function postAdd(Request $request){
+    public function postAdd(Request $request)
+    {
         $this->validate($request,
             [
-                'Ten' => 'required|unique:TheLoai, Ten|min:3|max:100'
+                'Ten' => 'required|min:6|max:100'
             ],
             [
                 'Ten.required' => 'Bạn chưa nhập tên thể loại',
@@ -44,7 +45,7 @@ class TheLoaiController extends Controller
         $theloai = TheLoai::find($id);
         $this->validate($request,  //validate lấy dữ liệu từ form
             [
-                'Ten'=>'required|unique:TheLoai, Ten|min:3|max:100' //kiểm tra các điều kiện
+                'Ten'=>'required|unique:TheLoai,Ten|min:6|max:100' //kiểm tra các điều kiện
             ],
             [
                 'Ten.required'=>'Bạn chưa nhập tên thể loại',
@@ -56,5 +57,10 @@ class TheLoaiController extends Controller
         $theloai->TenKhongDau = changeTitle($request->Ten);
         $theloai->save();
         return redirect('admin/theloai/edit/'.$id)->with('message','edit success');
+    }
+    public function getDelete($id){
+        $theloai = TheLoai::find($id);
+        $theloai->delete();
+        return redirect('admin/theloai/list')->with('message','Xóa Thành Công');
     }
 }
