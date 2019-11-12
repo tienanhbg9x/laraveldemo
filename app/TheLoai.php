@@ -14,6 +14,6 @@ class TheLoai extends Model
     }
     public function tintuc(){
         return $this->hasManyThrough('App\TinTuc','App\LoaiTin','idTheLoai','idLoaiTin','id');
-    }// tin tức lk qua loại tin,loại tin lk qua the loại
+    }// tin tức lk qua loại tin,loại tin lk qua thể loại
 
 }
